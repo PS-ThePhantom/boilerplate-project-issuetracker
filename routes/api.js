@@ -11,13 +11,19 @@ module.exports = function (app) {
   
     .get(function (req, res){
       let project = req.params.project;
-      let open = req.query.open;
-      let assigned_to = req.query.assigned_to;
+      const { _id, issue_title, issue_text , created_by, assigned_to, status_text, created_on, updated_on,  open} = req.query;
       
       const issues = projectIssues[project];
       let filteredIssues = issues.filter(issue => {
-        return (open === undefined || issue.open === open) && 
-               (assigned_to === undefined || issue.assigned_to === assigned_to);
+        return (_id === undefined || issue._id === _id) &&
+               (issue_title === undefined || issue.issue_title === issue_title) &&
+               (issue_text === undefined || issue.issue_text === issue_text) &&
+               (created_by === undefined || issue.created_by === created_by) &&
+               (assigned_to === undefined || issue.assigned_to === assigned_to) &&
+               (status_text === undefined || issue.status_text === status_text) &&
+               (created_on === undefined || issue.created_on === created_on) &&
+               (updated_on === undefined || issue.updated_on === updated_on) &&
+               (open === undefined || issue.open === open);
       });
 
       res.json(filteredIssues);
@@ -33,7 +39,7 @@ module.exports = function (app) {
       }
 
       const newIssue = {
-        _id: issueId++,
+        _id: "" + issueId++,
         issue_title: issue_title,
         issue_text: issue_text,
         created_by: created_by,
